@@ -1,11 +1,12 @@
 import axios from "axios";
 import uniqid from "uniqid";
 import { useEffect, useState } from "react";
+import TodoForm from "./TodoForm";
 function App() {
   const [todos, setTodos] = useState([]);
   useEffect(() => {
     axios
-      .get("https://6310743a826b98071a41c837.mockapi.io/todos")
+      .get(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos`)
       .then((res) => {
         setTodos(res.data);
         console.log(res.data);
@@ -15,7 +16,9 @@ function App() {
   //Remove Todo
   const removeTodo = (id) => {
     axios
-      .delete(`https://6310743a826b98071a41c837.mockapi.io/todos/:${id}`)
+      .delete(
+        `https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos/:${id}`
+      )
       .then((res) => {
         setTodos(todos.filter((todo) => todo.id !== id));
       })
@@ -26,9 +29,8 @@ function App() {
   //Add Todo
   const addTodo = (content) => {
     axios
-      .post("https://6310743a826b98071a41c837.mockapi.io/todos", {
+      .post(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos`, {
         content: content,
-        id: uniqid(),
         isCompleted: false,
       })
       .then((res) => {
@@ -42,7 +44,7 @@ function App() {
   //Update Todo
   const UpdateTodo = (id, content) => {
     axios
-      .put(`https://6310743a826b98071a41c837.mockapi.io/todos/:${id}`, {
+      .put(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos/:${id}`, {
         content: content,
       })
       .then((res) => {
@@ -59,7 +61,7 @@ function App() {
 
   return (
     <div>
-      <input type="text" placeholder="isminiz" />
+      <TodoForm addTodo={addTodo} />
       {todos.map((todo, id) => {
         return <div key={id}>{todo.content}</div>;
       })}
