@@ -1,26 +1,30 @@
 import axios from "axios";
-import uniqid from "uniqid";
-import { useEffect, useState } from "react";
-import TodoForm from "./TodoForm";
+import { useEffect, useRef, useState } from "react";
+import TodoForm from "./components/TodoForm";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import EditModal from "./components/EditModal";
 function App() {
   const [todos, setTodos] = useState([]);
-  useEffect(() => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const ref = useRef();
+  const getTodos = () => {
     axios
       .get(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos`)
       .then((res) => {
         setTodos(res.data);
         console.log(res.data);
       });
+  };
+  useEffect(() => {
+    getTodos();
   }, []);
 
   //Remove Todo
   const removeTodo = (id) => {
     axios
-      .delete(
-        `https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos/:${id}`
-      )
+      .delete(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos/${id}`)
       .then((res) => {
-        setTodos(todos.filter((todo) => todo.id !== id));
+        getTodos();
       })
       .catch((err) => {
         console.log(err);
@@ -30,32 +34,12 @@ function App() {
   const addTodo = (content) => {
     axios
       .post(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos`, {
-        content: content,
+        content,
         isCompleted: false,
       })
       .then((res) => {
-        setTodos([...todos, res.data]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  //Update Todo
-  const UpdateTodo = (id, content) => {
-    axios
-      .put(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos/:${id}`, {
-        content: content,
-      })
-      .then((res) => {
-        setTodos(
-          todos.map((todo) =>
-            todo.id === id ? { ...todo, content: content } : todo
-          )
-        );
-      })
-      .catch((err) => {
-        console.log(err);
+        console.log(res.data);
+        getTodos();
       });
   };
 
@@ -63,7 +47,32 @@ function App() {
     <div>
       <TodoForm addTodo={addTodo} />
       {todos.map((todo, id) => {
-        return <div key={id}>{todo.content}</div>;
+        return (
+          <div style={{ display: "flex" }}>
+            <div
+              contentEditable
+              ref={ref}
+              key={id}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {todo.content}
+            </div>
+            <button onClick={() => removeTodo(todo.id)}>
+              {<DeleteIcon />}
+            </button>
+            <button
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
+            >
+              {<EditIcon />}
+            </button>
+          </div>
+        );
       })}
     </div>
   );
