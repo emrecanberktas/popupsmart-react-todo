@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input } from "@chakra-ui/react";
+import { Input, Flex, Spacer } from "@chakra-ui/react";
 
 function TodoForm({ addTodo }) {
   const [value, setValue] = useState("");
@@ -11,23 +11,19 @@ function TodoForm({ addTodo }) {
     setValue(e.target.value);
   };
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <form onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          value={value}
-          onChange={handleChange}
-          placeholder="Add Todo..."
-          minLength="3"
-        />
-      </form>
-    </div>
+    <Flex justifyContent="center" alignItems="center">
+      <div>
+        <form onSubmit={handleSubmit}>
+          <Input
+            type="text"
+            value={value}
+            onChange={handleChange}
+            placeholder="Add Todo..."
+            minLength="3"
+          />
+        </form>
+      </div>
+    </Flex>
   );
 }
 

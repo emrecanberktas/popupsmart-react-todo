@@ -3,6 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import TodoForm from "./components/TodoForm";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import EditModal from "./components/EditModal";
+import { Container, Heading, Flex, Spacer } from "@chakra-ui/react";
+import DarkModeButton from "./components/DarkModeButton";
+import UserName from "./components/UserName";
 function App() {
   const [todos, setTodos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,20 +48,24 @@ function App() {
 
   return (
     <div>
+      <Flex minWidth="max-content" alignItems="center" gap="5">
+        <Heading as="h2">Popupsmart</Heading>
+        <Spacer />
+        <UserName />
+        <DarkModeButton />
+      </Flex>
+
       <TodoForm addTodo={addTodo} />
       {todos.map((todo, id) => {
         return (
-          <div style={{ display: "flex" }}>
-            <div
-              contentEditable
-              ref={ref}
-              key={id}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div ref={ref} key={id}>
               {todo.content}
             </div>
             <button onClick={() => removeTodo(todo.id)}>
@@ -67,6 +74,7 @@ function App() {
             <button
               onClick={() => {
                 setIsModalOpen(true);
+                <EditModal />;
               }}
             >
               {<EditIcon />}

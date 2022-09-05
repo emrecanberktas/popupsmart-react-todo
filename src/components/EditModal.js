@@ -14,6 +14,8 @@ import {
 
 function EditModal({ id, getTodos, isModalOpen }) {
   const ref = useRef();
+
+  // Update Todo
   const updateTodo = (id, content) => {
     axios
       .put(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos/${id}`, {
