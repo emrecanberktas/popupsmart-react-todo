@@ -10,10 +10,12 @@ import {
   ModalCloseButton,
   Button,
   Input,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 function EditModal({ id, getTodos, isModalOpen }) {
   const ref = useRef();
+  const { isOpen, onClose } = useDisclosure();
 
   // Update Todo
   const updateTodo = (id, content) => {
@@ -30,15 +32,14 @@ function EditModal({ id, getTodos, isModalOpen }) {
   };
   return (
     <>
-      <Button>Open Modal</Button>
-
-      <Modal>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
-          <ModalBody ref={ref}>
+          <ModalBody>
             <Input />
+            apsldpalsd
           </ModalBody>
 
           <ModalFooter>
