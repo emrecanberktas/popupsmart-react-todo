@@ -42,7 +42,6 @@ function App() {
         isCompleted: false,
       })
       .then((res) => {
-        console.log(res.data);
         getTodos();
       });
   };
