@@ -3,14 +3,13 @@ import { useEffect, useRef, useState } from "react";
 import TodoForm from "./components/TodoForm";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import EditModal from "./components/EditModal";
-import { Heading, Flex, Spacer, useDisclosure } from "@chakra-ui/react";
+import { Heading, Flex, Spacer } from "@chakra-ui/react";
 import DarkModeButton from "./components/DarkModeButton";
 import UserName from "./components/UserName";
 function App() {
   const [todos, setTodos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const ref = useRef();
-  const { onOpen } = useDisclosure();
   const getTodos = () => {
     axios
       .get(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos`)
@@ -22,6 +21,10 @@ function App() {
   useEffect(() => {
     getTodos();
   }, []);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
   //Remove Todo
   const removeTodo = (id) => {
@@ -56,9 +59,11 @@ function App() {
       </Flex>
 
       <TodoForm addTodo={addTodo} />
+      <br />
       {todos.map((todo, id) => {
         return (
           <div
+            key={id}
             style={{
               display: "flex",
               justifyContent: "center",
@@ -69,16 +74,9 @@ function App() {
               {todo.content}
             </div>
             <button onClick={() => removeTodo(todo.id)}>
-              {<DeleteIcon />}
+              {<DeleteIcon w={5} h={5} />}
             </button>
-            <button
-              onClick={() => {
-                onOpen();
-                <EditModal />;
-              }}
-            >
-              {<EditIcon />}
-            </button>
+            <EditModal />
           </div>
         );
       })}
