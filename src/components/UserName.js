@@ -10,6 +10,7 @@ import {
   useDisclosure,
   Button,
   Input,
+  FormLabel,
 } from "@chakra-ui/react";
 
 function UserName() {
@@ -17,13 +18,15 @@ function UserName() {
   const [name, setName] = useState(() => {
     return localStorage.getItem("name") || "";
   });
-  const onSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(name);
-    onClose();
-  };
+
   const onChange = (e) => {
     setName(e.target.value);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    localStorage.setItem("name", name);
+    onClose();
   };
 
   useEffect(() => {
@@ -38,19 +41,21 @@ function UserName() {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Lütfen İsminizi Girin</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Input onChange={onChange} placeholder={name} />
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Kapat
-            </Button>
-            <Button variant="ghost" onSubmit={onSubmit} onClick={onClose}>
-              Uygula
-            </Button>
-          </ModalFooter>
+          <FormLabel>
+            <ModalHeader>Lütfen İsminizi Girin</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Input onChange={onChange} placeholder={name} type="text" />
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
+                Uygula
+              </Button>
+              <Button variant="ghost" onClick={onClose} onSubmit={onSubmit}>
+                Kapat
+              </Button>
+            </ModalFooter>
+          </FormLabel>
         </ModalContent>
       </Modal>
     </>
