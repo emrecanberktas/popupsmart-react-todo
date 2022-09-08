@@ -76,7 +76,7 @@ function App() {
             <button onClick={() => removeTodo(todo.id)}>
               {<DeleteIcon w={5} h={5} />}
             </button>
-            <EditModal />
+            <EditModal id={todo.id} getTodos={getTodos} />
           </div>
         );
       })}

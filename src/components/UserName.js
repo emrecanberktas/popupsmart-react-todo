@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -10,14 +10,16 @@ import {
   useDisclosure,
   Button,
   Input,
-  FormLabel,
 } from "@chakra-ui/react";
+
+const getName = () => {
+  return localStorage.getItem("name") || "";
+};
 
 function UserName() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [name, setName] = useState(() => {
-    return localStorage.getItem("name") || "";
-  });
+  const [name, setName] = useState(getName);
+  const [displayName, setDisplayName] = useState(getName);
 
   const onChange = (e) => {
     setName(e.target.value);
@@ -26,36 +28,34 @@ function UserName() {
   const onSubmit = (e) => {
     e.preventDefault();
     localStorage.setItem("name", name);
+    setDisplayName(name);
     onClose();
   };
 
-  useEffect(() => {
-    localStorage.setItem("name", name);
-  }, [name]);
   return (
     <>
       <Button onClick={onOpen}>
-        {name !== "" ? name : "Lütfen İsminizi Girin"}
+        {displayName !== "" ? displayName : "Lütfen İsminizi Girin"}
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <FormLabel>
+          <form onSubmit={onSubmit}>
             <ModalHeader>Lütfen İsminizi Girin</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <Input onChange={onChange} placeholder={name} type="text" />
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={onClose}>
+              <Button colorScheme="blue" mr={3} type="submit">
                 Uygula
               </Button>
-              <Button variant="ghost" onClick={onClose} onSubmit={onSubmit}>
+              <Button variant="ghost" onClick={onClose}>
                 Kapat
               </Button>
             </ModalFooter>
-          </FormLabel>
+          </form>
         </ModalContent>
       </Modal>
     </>

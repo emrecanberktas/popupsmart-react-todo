@@ -21,23 +21,21 @@ function EditModal({ id, getTodos }) {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const updateTodo = (id, content) => {
+  const onSubmit = (e) => {
+    e.preventDefault();
     axios
       .put(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos/${id}`, {
-        content: content,
+        content: editedContent,
       })
       .then(() => {
         getTodos();
+        onClose();
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  const handleEdit = (e) => {
-    e.preventDefault();
-  };
 
-  // get modal input value
   const handleInput = (e) => {
     setEditedContent(e.target.value);
   };
@@ -50,19 +48,19 @@ function EditModal({ id, getTodos }) {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <FormControl>
+          <form onSubmit={onSubmit}>
             <ModalHeader>Modal Title</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Input type="text" />
+              <Input type="text" value={editedContent} onChange={handleInput} />
             </ModalBody>
             <ModalFooter>
               <Button colorScheme="blue" mr={3}>
-                Close
+                Kapat
               </Button>
-              <Button variant="ghost">Secondary Action</Button>
+              <Button type="submit">Güncelle</Button>
             </ModalFooter>
-          </FormControl>
+          </form>
         </ModalContent>
       </Modal>
     </>
