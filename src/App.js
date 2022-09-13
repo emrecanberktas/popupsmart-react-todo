@@ -1,14 +1,13 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import TodoForm from "./components/TodoForm";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { DeleteIcon } from "@chakra-ui/icons";
 import EditModal from "./components/EditModal";
 import { Heading, Flex, Spacer } from "@chakra-ui/react";
 import DarkModeButton from "./components/DarkModeButton";
 import UserName from "./components/UserName";
 function App() {
   const [todos, setTodos] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const ref = useRef();
   const getTodos = () => {
     axios
@@ -21,10 +20,6 @@ function App() {
   useEffect(() => {
     getTodos();
   }, []);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
 
   //Remove Todo
   const removeTodo = (id) => {
@@ -43,6 +38,17 @@ function App() {
       .post(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos`, {
         content,
         isCompleted: false,
+      })
+      .then((res) => {
+        getTodos();
+      });
+  };
+
+  // Complete Todo
+  const completeTodo = (id) => {
+    axios
+      .put(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos/${id}`, {
+        isCompleted: true,
       })
       .then((res) => {
         getTodos();
@@ -70,6 +76,7 @@ function App() {
               alignItems: "center",
             }}
           >
+            <input type="checkbox" onClick={() => completeTodo(todo.id)} />
             <div ref={ref} key={id}>
               {todo.content}
             </div>

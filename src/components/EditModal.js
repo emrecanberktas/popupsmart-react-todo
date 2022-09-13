@@ -11,8 +11,6 @@ import {
   Button,
   Input,
   useDisclosure,
-  FormLabel,
-  FormControl,
 } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
 
@@ -52,13 +50,18 @@ function EditModal({ id, getTodos }) {
             <ModalHeader>Modal Title</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Input type="text" value={editedContent} onChange={handleInput} />
+              <Input
+                type="text"
+                value={editedContent}
+                onChange={handleInput}
+                minLength="3"
+              />
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" mr={3}>
-                Kapat
+              <Button colorScheme="blue" mr={3} type="submit">
+                Güncelle
               </Button>
-              <Button type="submit">Güncelle</Button>
+              <Button onClick={onClose}>Kapat</Button>
             </ModalFooter>
           </form>
         </ModalContent>
