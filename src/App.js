@@ -89,14 +89,27 @@ function App() {
           >
             <CloseIcon
               onClick={() => uncompleteTodo(todo.id)}
+              color="red.500"
               cursor="pointer"
+              w={5}
             />
 
-            <CheckIcon onClick={() => completeTodo(todo.id)} cursor="pointer" />
+            <CheckIcon
+              onClick={() => completeTodo(todo.id)}
+              color="green.500"
+              cursor="pointer"
+              w={5}
+              h={4}
+            />
             {todo.isCompleted ? <strike>{todo.content}</strike> : todo.content}
-            <button onClick={() => removeTodo(todo.id)}>
-              {<DeleteIcon w={5} h={5} />}
-            </button>
+            {
+              <DeleteIcon
+                w={6}
+                h={5}
+                onClick={() => removeTodo(todo.id)}
+                cursor="pointer"
+              />
+            }
             <EditModal id={todo.id} getTodos={getTodos} />
           </div>
         );
