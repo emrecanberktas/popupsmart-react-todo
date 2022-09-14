@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import TodoForm from "./components/TodoForm";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import EditModal from "./components/EditModal";
 import { Heading, Flex, Spacer } from "@chakra-ui/react";
 import DarkModeButton from "./components/DarkModeButton";
@@ -55,6 +55,17 @@ function App() {
       });
   };
 
+  // Uncomplete Todo
+  const uncompleteTodo = (id) => {
+    axios
+      .put(`https://${process.env.REACT_APP_API_KEY}.mockapi.io/todos/${id}`, {
+        isCompleted: false,
+      })
+      .then((res) => {
+        getTodos();
+      });
+  };
+
   return (
     <div>
       <Flex minWidth="max-content" alignItems="center" gap="5">
@@ -76,10 +87,13 @@ function App() {
               alignItems: "center",
             }}
           >
-            <input type="checkbox" onClick={() => completeTodo(todo.id)} />
-            <div ref={ref} key={id}>
-              {todo.content}
-            </div>
+            <CloseIcon
+              onClick={() => uncompleteTodo(todo.id)}
+              cursor="pointer"
+            />
+
+            <CheckIcon onClick={() => completeTodo(todo.id)} cursor="pointer" />
+            {todo.isCompleted ? <strike>{todo.content}</strike> : todo.content}
             <button onClick={() => removeTodo(todo.id)}>
               {<DeleteIcon w={5} h={5} />}
             </button>
